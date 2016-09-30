@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="1">
+
+    <TableRow>
+        <TextView
+            android:layout_height="wrap_content"
+            android:text="@string/country"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/country"/>
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_height="wrap_content"
+            android:text="@string/city"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/city"/>
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_height="wrap_content"
+            android:text="@string/updateTime"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/updateTime"/>
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_height="wrap_content"
+            android:text="@string/weatherDesc"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/weatherDesc"/>
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_height="wrap_content"
+            android:text="@string/temp"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/temp"/>
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_height="wrap_content"
+            android:text="@string/feeltemp"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/feelTemp"/>
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_height="wrap_content"
+            android:text="@string/shidu"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/shidu"/>
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_height="wrap_content"
+            android:text="@string/presure"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/presure"/>
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_height="wrap_content"
+            android:text="@string/rainValue"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/rainValue"/>
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_height="wrap_content"
+            android:text="@string/windDirection"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/windDirection"/>
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_height="wrap_content"
+            android:text="@string/windDegree"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/windDegree"/>
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_height="wrap_content"
+            android:text="@string/windSpeed"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:id="@+id/windSpeed"/>
+    </TableRow>
+
+</TableLayout>

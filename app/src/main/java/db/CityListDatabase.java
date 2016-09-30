@@ -29,7 +29,7 @@ public class CityListDatabase {
 
     public List<Province> LoadProvince() {
         List<Province> resullt = new ArrayList<>();
-        Cursor cursor = database.query(DB_name,null,null,null,null,null,null);
+        Cursor cursor = database.query(DB_name,new String[]{"province"}, null,null,null,null,null);
         if (cursor.moveToFirst()) {
             do {
                 String provincename = cursor.getString(cursor.getColumnIndex("province"));
@@ -44,7 +44,7 @@ public class CityListDatabase {
 
     public List<City> LoadCity(Province province) {
         List<City> result = new ArrayList<>();
-        Cursor cursor = database.query(DB_name,null,"province = ?",new String[]{province.getName()},null,null,null);
+        Cursor cursor = database.query(DB_name,new String[]{"city"}, "province = ?",new String[]{province.getName()},null,null,null);
         if (cursor.moveToFirst()) {
             do {
                 String cityname = cursor.getString(cursor.getColumnIndex("city"));
@@ -57,9 +57,9 @@ public class CityListDatabase {
         return result;
     }
 
-    public List<County> LoadCounty(City city) {
+    public List<County> LoadCounty(Province province,City city) {
         List<County> result = new ArrayList<>();
-        Cursor cursor = database.query(DB_name,null,"city = ?",new String[]{city.getName()},null,null,null );
+        Cursor cursor = database.query(DB_name,new String[]{"county"}, "province = ?,city = ?",new String[]{province.getName(),city.getName()},null,null,null );
         if (cursor.moveToFirst()) {
             do {
                 String countyName = cursor.getString(cursor.getColumnIndex("county"));
@@ -73,6 +73,13 @@ public class CityListDatabase {
             } while (cursor.moveToNext());
         }
         cursor.close();
+        return result;
+    }
+
+    public String getID(String ProvinceName,String CityName,String CountyName) {
+        String result;
+        Cursor cursor = database.query(DB_name,new String[]{"ID"},"province = ?,city = ?,county = ?",new String[]{ProvinceName,CityName,CountyName},null,null,null);
+        result = cursor.getString(cursor.getColumnIndex("ID"));
         return result;
     }
 }

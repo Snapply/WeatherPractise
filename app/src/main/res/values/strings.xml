@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">WeatherPractise</string>
+    <string name="country">国家</string>
+    <string name="city">城市</string>
+    <string name="updateTime">更新时间</string>
+    <string name="weatherDesc">天气情况</string>
+    <string name="temp">温度</string>
+    <string name="feeltemp">体感温度</string>
+    <string name="shidu">湿度</string>
+    <string name="presure">气压</string>
+    <string name="rainValue">降雨量</string>
+    <string name="windDirection">风向</string>
+    <string name="windDegree">风级</string>
+    <string name="windSpeed">风速</string>
 </resources>
