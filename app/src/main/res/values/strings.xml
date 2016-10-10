@@ -1,6 +1,9 @@
 <resources>
+    <string name="basic">地理信息</string>
+    <string name="information">天气信息</string>
     <string name="app_name">WeatherPractise</string>
     <string name="country">国家</string>
+    <string name="china">中国</string>
     <string name="city">城市</string>
     <string name="updateTime">更新时间</string>
     <string name="weatherDesc">天气情况</string>
@@ -12,4 +15,6 @@
     <string name="windDirection">风向</string>
     <string name="windDegree">风级</string>
     <string name="windSpeed">风速</string>
+    <string name="freshButton">刷新</string>
+    <string name="selectButton">选择</string>
 </resources>

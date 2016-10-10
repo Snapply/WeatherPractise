@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class ParseHttpResponse {
 
-    public void parseResponse(String jsonData,SaveParseHttpResponseListener listener) {
+    public static void parseResponse(String jsonData,SaveParseHttpResponseListener listener) {
         ArrayList<String> Basic = new ArrayList<>();
         ArrayList<String> Status = new ArrayList<>();
         ArrayList<String> WeatherNow = new ArrayList<>();

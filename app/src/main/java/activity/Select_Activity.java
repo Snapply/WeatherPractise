@@ -1,7 +1,10 @@
 package activity;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -14,6 +17,7 @@ import com.example.luweiling.weatherpractise.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import Tool.GetContext;
 import db.CityListDatabase;
 import model.City;
 import model.County;
@@ -56,6 +60,12 @@ public class Select_Activity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences preferences = getSharedPreferences("data",MODE_PRIVATE);
+        if (preferences.getBoolean("city_selected",false)) {
+            Intent intent = new Intent(this,Weather_Activity.class);
+            startActivity(intent);
+            finish();
+        }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.selectcitylist_layout);
         titleView = (TextView) findViewById(R.id.title_view);
@@ -141,6 +151,9 @@ public class Select_Activity extends Activity {
                     {
                         selectCounty = datalist.get(position);
                         selectID = database.getID(selectProvince,selectCity,selectCounty);
+                        SharedPreferences.Editor editor = (SharedPreferences.Editor) GetContext.getContext().getSharedPreferences("selected",MODE_PRIVATE);
+                        editor.putString("city_selected_id",null);
+                        editor.commit();
                         CurrentLevel = 0;
                         selectProvince = null;
                         selectCity = null;

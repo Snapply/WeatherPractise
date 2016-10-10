@@ -14,14 +14,19 @@ import Tool.SaveParseHttpResponseListener;
  */
 public class Util {
 
-    public void saveWeatherInformation(final Context context, String weatherResponss) {
+    public static void saveWeatherInformation(final Context context, String weatherResponss) {
         final SharedPreferences.Editor editor = context.getSharedPreferences("data",Context.MODE_PRIVATE).edit();
-        new ParseHttpResponse().parseResponse(weatherResponss, new SaveParseHttpResponseListener() {
+        ParseHttpResponse.parseResponse(weatherResponss, new SaveParseHttpResponseListener() {
             @Override
             public void onBasicComplete(ArrayList<String> list) {
-                editor.putString("city",list.get(0));
-                editor.putString("country",list.get(1));
-                editor.putString("updateTime",list.get(2));
+                if (list.get(0) != null) {
+                    editor.putBoolean("city_selected",true);
+                    editor.putString("city",list.get(0));
+                    editor.putString("country",list.get(1));
+                    editor.putString("updateTime",list.get(2));
+                } else {
+                    editor.putBoolean("city_selected",false);
+                }
             }
 
             @Override

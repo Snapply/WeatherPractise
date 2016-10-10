@@ -3,6 +3,7 @@ package db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -11,6 +12,8 @@ import java.io.File;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import Tool.GetContext;
 
 /**
  * Created by luweiling on 2016/9/29 0029.
@@ -48,7 +51,7 @@ public class CityDatabasesHelper extends SQLiteOpenHelper {
                 db.execSQL(SQL);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Toast.makeText(GetContext.getContext(), e.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 
