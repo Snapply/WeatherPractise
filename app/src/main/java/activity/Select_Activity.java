@@ -45,7 +45,7 @@ public class Select_Activity extends Activity {
 
     private static final int SelectLevel = 4;
 
-    public int CurrentLevel = 0;
+    public int CurrentLevel = ProvinceLevel;
 
     private CityListDatabase database;
 
@@ -61,17 +61,20 @@ public class Select_Activity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences preferences = getSharedPreferences("data",MODE_PRIVATE);
-        if (preferences.getBoolean("city_selected",false)) {
-            Intent intent = new Intent(this,Weather_Activity.class);
-            startActivity(intent);
-            finish();
+        if (preferences != null) {
+            if (preferences.getBoolean("city_selected",false)) {
+                Intent intent = new Intent(this,Weather_Activity.class);
+                startActivity(intent);
+                finish();
+            }
         }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.selectcitylist_layout);
         titleView = (TextView) findViewById(R.id.title_view);
         listView = (ListView) findViewById(R.id.select_list);
         database = new CityListDatabase(this);
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,datalist);
+        datalist = init();
+        adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,datalist);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -154,7 +157,10 @@ public class Select_Activity extends Activity {
                         SharedPreferences.Editor editor = (SharedPreferences.Editor) GetContext.getContext().getSharedPreferences("selected",MODE_PRIVATE);
                         editor.putString("city_selected_id",null);
                         editor.commit();
-                        CurrentLevel = 0;
+                        Intent intent = new Intent(Select_Activity.this,Weather_Activity.class);
+                        startActivity(intent);
+                        finish();
+                        CurrentLevel = ProvinceLevel;
                         selectProvince = null;
                         selectCity = null;
                         selectCounty = null;
@@ -165,5 +171,14 @@ public class Select_Activity extends Activity {
                 }
             }
         });
+    }
+
+    private ArrayList<String> init() {
+        ArrayList<String> result = new ArrayList<>();
+        List<Province> list = database.LoadProvince();
+        for (Province province : list) {
+            result.add(province.getName());
+        }
+        return result;
     }
 }

@@ -1,19 +1,35 @@
 package db;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.XmlResourceParser;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
+import android.util.Xml;
 import android.widget.Toast;
+
+import com.example.luweiling.weatherpractise.R;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+import org.xmlpull.v1.XmlPullParser;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.net.URI;
+import java.util.logging.XMLFormatter;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import Tool.GetContext;
+import Tool.LogUtil;
 
 /**
  * Created by luweiling on 2016/9/29 0029.
@@ -36,9 +52,54 @@ public class CityDatabasesHelper extends SQLiteOpenHelper {
 
     private void insert(SQLiteDatabase db) {
         try {
+            XmlResourceParser xmlResourceParser = GetContext.getContext().getResources().getXml(R.xml.city);
+            int eventType = xmlResourceParser.getEventType();
+            StringBuilder id =null, name = null,county = null ,city = null , province = null;
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                String nodeName = xmlResourceParser.getName();
+                switch (eventType) {
+                    case XmlPullParser.START_TAG: {
+                        if ("td".equals(nodeName)) {
+                            if ((id.length() == 0) && (name.length() == 0) && (county.length() == 0) && (city.length() == 0) && (province.length() == 0)) {
+                                id.append(xmlResourceParser.nextText());
+                            } else if ((id.length() != 0) && (name.length() == 0) && (county.length() == 0) && (city.length() == 0) && (province.length() == 0)) {
+                                name.append(xmlResourceParser.nextText());
+                            } else if ((id.length() != 0) && (name.length() != 0) && (county.length() ==0) && (city.length() == 0) & (province.length() == 0)) {
+                                county.append(xmlResourceParser.nextText());
+                            } else if ((id.length() != 0) && (name.length() != 0) && (county.length() != 0) && (city.length() == 0) && (province.length() == 0)) {
+                                city.append(xmlResourceParser.nextText());
+                            } else if ((id.length() != 0) && (name.length() != 0) && (county.length() != 0) && (city.length() != 0) && (province.length() == 0)) {
+                                province.append(xmlResourceParser.nextText());
+                            }
+                        }
+                        break;
+                    }
+                    case XmlPullParser.END_TAG: {
+                        if ("tr".equals(nodeName)) {
+                            ContentValues values = new ContentValues();
+                            values.put("id",id.toString());
+                            values.put("name",name.toString());
+                            values.put("county",county.toString());
+                            values.put("city",city.toString());
+                            values.put("province",province.toString());
+                            db.insert("citylist",null,values);
+                            values.clear();
+                        }
+                        id.setLength(0);
+                        name.setLength(0);
+                        county.setLength(0);
+                        city.setLength(0);
+                        province.setLength(0);
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+            /*
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(new File("city.xml"));
+            Document document = builder.parse(xmlResourceParser.toString());
             NodeList list = document.getElementsByTagName("tr");
             for (int i=0;i < list.getLength();i++) {
                 org.w3c.dom.Element element = (org.w3c.dom.Element)list.item(i);
@@ -50,8 +111,11 @@ public class CityDatabasesHelper extends SQLiteOpenHelper {
                 String SQL = "insert into citylist values( '" + str1 + "','" + str2 + "','" + str3 + "','" + str4 + "','" + str5 + "');";
                 db.execSQL(SQL);
             }
+            */
         } catch (Exception e) {
-            Toast.makeText(GetContext.getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+            LogUtil.d("CityDatabaseHelpe Exception: " + e.toString());
+            e.printStackTrace();
+            Toast.makeText(GetContext.getContext(), e.toString(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -60,6 +124,7 @@ public class CityDatabasesHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_DATALIST);
         //db.execSQL(INSERT_DATA);
         insert(db);
+        Toast.makeText(GetContext.getContext(), "数据库创建成功", Toast.LENGTH_LONG).show();
     }
 
     @Override
