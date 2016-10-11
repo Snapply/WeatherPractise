@@ -170,9 +170,16 @@ public class Select_Activity extends Activity {
     private ArrayList<String> init() {
         LogUtil.d("Select_Activity: datalist初始化，取数据库数据");
         ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> temp = new ArrayList<>();
         List<Province> list = database.LoadProvince();
         for (Province province : list) {
-            result.add(province.getName());
+            //LogUtil.d("Select_Activity: init datalist provinceName = " + province.getName());
+            temp.add(province.getName());
+        }
+        for (String provinceName : temp) {
+            if (!result.contains(provinceName)) {
+                result.add(provinceName);
+            }
         }
         return result;
     }

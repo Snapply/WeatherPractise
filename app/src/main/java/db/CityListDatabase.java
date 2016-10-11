@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+import Tool.LogUtil;
 import model.City;
 import model.County;
 import model.Province;
@@ -28,13 +29,14 @@ public class CityListDatabase {
     }
 
     public List<Province> LoadProvince() {
+        LogUtil.d("Database: 装载省级数据列表");
         List<Province> resullt = new ArrayList<>();
         Cursor cursor = database.query(DB_name,new String[]{"province"}, null,null,null,null,null);
         if (cursor.moveToFirst()) {
             do {
-                String provincename = cursor.getString(cursor.getColumnIndex("province"));
+                String provinceName = cursor.getString(cursor.getColumnIndex("province"));
                 Province province = new Province();
-                province.setName(provincename);
+                province.setName(provinceName);
                 resullt.add(province);
             } while (cursor.moveToNext());
         }
