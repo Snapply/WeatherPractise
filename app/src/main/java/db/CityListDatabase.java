@@ -44,8 +44,9 @@ public class CityListDatabase {
         return resullt;
     }
 
-    public List<City> LoadCity(Province province) {
-        List<City> result = new ArrayList<>();
+    public ArrayList<City> LoadCity(Province province) {
+        LogUtil.d("Database: 装载市级数据列表");
+        ArrayList<City> result = new ArrayList<>();
         Cursor cursor = database.query(DB_name,new String[]{"city"}, "province = ?",new String[]{province.getName()},null,null,null);
         if (cursor.moveToFirst()) {
             do {
@@ -59,14 +60,15 @@ public class CityListDatabase {
         return result;
     }
 
-    public List<County> LoadCounty(Province province,City city) {
-        List<County> result = new ArrayList<>();
-        Cursor cursor = database.query(DB_name,new String[]{"county"}, "province = ?,city = ?",new String[]{province.getName(),city.getName()},null,null,null );
+    public ArrayList<County> LoadCounty(Province province,City city) {
+        LogUtil.d("Database: 装载地区数据列表");
+        ArrayList<County> result = new ArrayList<>();
+        Cursor cursor = database.query(DB_name,new String[]{"ID","name","county"}, "province = ? and city = ?",new String[]{province.getName(),city.getName()},null,null,null );
         if (cursor.moveToFirst()) {
             do {
-                String countyName = cursor.getString(cursor.getColumnIndex("county"));
-                String countyCode = cursor.getString(cursor.getColumnIndex("name"));
                 String countyID = cursor.getString(cursor.getColumnIndex("ID"));
+                String countyCode = cursor.getString(cursor.getColumnIndex("name"));
+                String countyName = cursor.getString(cursor.getColumnIndex("county"));
                 County county = new County();
                 county.setCountyName(countyName);
                 county.setCountyCode(countyCode);
@@ -80,7 +82,8 @@ public class CityListDatabase {
 
     public String getID(String ProvinceName,String CityName,String CountyName) {
         String result;
-        Cursor cursor = database.query(DB_name,new String[]{"ID"},"province = ?,city = ?,county = ?",new String[]{ProvinceName,CityName,CountyName},null,null,null);
+        Cursor cursor = database.query(DB_name,new String[]{"ID"},"province = ? and city = ? and county = ?",new String[]{ProvinceName,CityName,CountyName},null,null,null);
+        cursor.moveToFirst();
         result = cursor.getString(cursor.getColumnIndex("ID"));
         return result;
     }

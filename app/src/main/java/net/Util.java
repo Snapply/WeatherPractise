@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import Tool.LogUtil;
 import Tool.ParseHttpResponse;
 import Tool.SaveParseHttpResponseListener;
 
@@ -15,6 +16,7 @@ import Tool.SaveParseHttpResponseListener;
 public class Util {
 
     public static void saveWeatherInformation(final Context context, String weatherResponss) {
+        LogUtil.d("Util: 存储天气数据至本地");
         final SharedPreferences.Editor editor = context.getSharedPreferences("data",Context.MODE_PRIVATE).edit();
         ParseHttpResponse.parseResponse(weatherResponss, new SaveParseHttpResponseListener() {
             @Override
@@ -27,11 +29,13 @@ public class Util {
                 } else {
                     editor.putBoolean("city_selected",false);
                 }
+                editor.commit();
             }
 
             @Override
             public void onStatusComplete(ArrayList<String> list) {
                 editor.putString("statusCode",list.get(0));
+                editor.commit();
             }
 
             @Override
@@ -45,13 +49,14 @@ public class Util {
                 editor.putString("windDirection",list.get(6));
                 editor.putString("windDegree",list.get(7));
                 editor.putString("windSpeed",list.get(8));
+                editor.commit();
             }
 
             @Override
             public void onError(Exception e) {
-                Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+                LogUtil.d("Util; Util错误信息-->" + e.toString());
+                e.printStackTrace();
             }
         });
-        editor.commit();
     }
 }

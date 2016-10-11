@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class ParseHttpResponse {
 
     public static void parseResponse(String jsonData,SaveParseHttpResponseListener listener) {
+        LogUtil.d("ParseHttpResponse: 解析数据");
         ArrayList<String> Basic = new ArrayList<>();
         ArrayList<String> Status = new ArrayList<>();
         ArrayList<String> WeatherNow = new ArrayList<>();
@@ -20,6 +21,7 @@ public class ParseHttpResponse {
                 switch (jsonArray.getString(i)) {
                     case "basic" :
                     {
+                        LogUtil.d("ParseHttpResponse: 解析Basic数据");
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String city = jsonObject.getString("city");
                         String country = jsonObject.getString("cnty");
@@ -31,6 +33,7 @@ public class ParseHttpResponse {
                     }
                     case "status" :
                     {
+                        LogUtil.d("ParseHttpResponse: 解析status数据");
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String statusCode = jsonObject.getString("status");
                         Status.add(statusCode);
@@ -38,6 +41,7 @@ public class ParseHttpResponse {
                     }
                     case "now" :
                     {
+                        LogUtil.d("ParseHttpResponse: 解析天气数据");
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String weatherDesc = jsonObject.getJSONObject("cond").getString("txt");
                         String temp = jsonObject.getString("tmp");
@@ -63,6 +67,7 @@ public class ParseHttpResponse {
                         break;
                 }
             }
+            LogUtil.d("ParseHttpResponse: 存储天气数据");
             listener.onBasicComplete(Basic);
             listener.onStatusComplete(Status);
             listener.onWeatherComplete(WeatherNow);

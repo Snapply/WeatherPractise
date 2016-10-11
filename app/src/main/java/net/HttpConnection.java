@@ -6,14 +6,18 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import Tool.LogUtil;
+
 /**
  * Created by luweiling on 2016/9/30 0030.
  */
 public class HttpConnection {
     public static void sendRequest(final String address, final CallBackListener listener) {
+        LogUtil.d("HttpConnection: 建立链接");
         new Thread(new Runnable() {
             @Override
             public void run() {
+                LogUtil.d("HttpConnection: 开启链接子线程");
                 HttpURLConnection connection = null;
                 try {
                     URL url = new URL(address);
@@ -28,11 +32,9 @@ public class HttpConnection {
                     while ((line = bufferedReader.readLine()) != null) {
                         response.append(line);
                     }
-                    if (listener != null)
-                        listener.onComplete(response.toString());
+                    listener.onComplete(response.toString());
                 } catch (Exception e) {
-                    if (listener != null)
-                        listener.onErroe(e);
+                    listener.onError(e);
                 } finally {
                     if (connection != null)
                         connection.disconnect();

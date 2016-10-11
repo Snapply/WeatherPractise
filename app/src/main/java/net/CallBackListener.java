@@ -7,5 +7,5 @@ public interface CallBackListener {
 
     public void onComplete(String Response);
 
-    public void onErroe(Exception e);
+    public void onError(Exception e);
 }

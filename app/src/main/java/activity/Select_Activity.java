@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -35,18 +34,18 @@ public class Select_Activity extends Activity {
     private ArrayAdapter<String> adapter;
     private ArrayList<String> datalist = new ArrayList<>();
 
-    private static final int ProvinceLevel = 1;
-    private static final int CityLevel = 2;
-    private static final int CountyLevel = 3;
-    private static final int SelectLevel = 4;
-    public int CurrentLevel = ProvinceLevel;
+    private static final int ProvinceSelectLevel = 1;
+    private static final int CitySelectLevel = 2;
+    private static final int CountySelectLevel = 3;
+    private static final int IDSelectLevel = 4;
+    public int CurrentLevel = ProvinceSelectLevel;
 
     private CityListDatabase database;
 
-    public String selectID;
-    private String selectProvince;
-    private String selectCity;
-    private String selectCounty;
+    public String selectedID;
+    private String selectedProvince;
+    private String selectedCity;
+    private String selectedCounty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,94 +69,78 @@ public class Select_Activity extends Activity {
         datalist = init();
         adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,datalist);
         listView.setAdapter(adapter);
+        titleView.setText("中国");
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (CurrentLevel) {
-                    case ProvinceLevel:
+                    case ProvinceSelectLevel:
                     {
-                        List<Province> list = database.LoadProvince();
-                        ArrayList<String> data = new ArrayList<String>();
-                        for (Province province : list) {
-                            data.add(province.getName());
+                        CurrentLevel = CitySelectLevel;
+                        Province selectProvince = new Province();
+                        selectProvince.setName(datalist.get(position));
+                        selectedProvince = datalist.get(position);
+                        ArrayList<City> cityArrayList = database.LoadCity(selectProvince);
+                        ArrayList<String> temp = new ArrayList<String>();
+                        ArrayList<String> list = new ArrayList<String>();
+                        for (City city : cityArrayList) {
+                            temp.add(city.getName());
+                        }
+                        for (String cityName : temp) {
+                            if (!list.contains(cityName)) {
+                                list.add(cityName);
+                            }
                         }
                         datalist.clear();
-                        datalist.addAll(data);
-                        datalist.notify();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                titleView.setText("中国");
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-                        CurrentLevel = CityLevel;
+                        datalist.addAll(list);
+                        adapter.notifyDataSetChanged();
+                        titleView.setText(selectedProvince);
                         break;
                     }
-                    case CityLevel:
+                    case CitySelectLevel:
                     {
-                        List<City> list = new ArrayList<City>();
-                        Province province = new Province();
-                        selectProvince = datalist.get(position);
-                        province.setName(selectProvince);
-                        list = database.LoadCity(province);
-                        ArrayList<String> data = new ArrayList<String>();
-                        for (City city : list) {
-                            data.add(city.getName());
+                        CurrentLevel = CountySelectLevel;
+                        Province selectProvince = new Province();
+                        selectProvince.setName(selectedProvince);
+                        City selectCity = new City();
+                        selectedCity = datalist.get(position);
+                        selectCity.setName(selectedCity);
+                        ArrayList<County> countyArrayList = database.LoadCounty(selectProvince,selectCity);
+                        ArrayList<String> temp = new ArrayList<String>();
+                        ArrayList<String> list = new ArrayList<String>();
+                        for (County county : countyArrayList) {
+                            temp.add(county.getCountyName());
+                        }
+                        for (String countyName : temp) {
+                            if (!list.contains(countyName)) {
+                                list.add(countyName);
+                            }
                         }
                         datalist.clear();
-                        datalist.addAll(data);
-                        datalist.notify();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                titleView.setText(selectProvince);
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-                        CurrentLevel = CountyLevel;
+                        datalist.addAll(list);
+                        adapter.notifyDataSetChanged();
+                        titleView.setText(selectedCity);
                         break;
                     }
-                    case CountyLevel:
+                    case CountySelectLevel:
                     {
-                        List<County> list = new ArrayList<County>();
-                        City city = new City();
-                        selectCity = datalist.get(position);
-                        city.setName(selectCity);
-                        Province province = new Province();
-                        province.setName(selectProvince);
-                        list = database.LoadCounty(province,city);
-                        ArrayList<String> data = new ArrayList<String>();
-                        for (County county : list) {
-                            data.add(county.getCountyName());
+                        CurrentLevel = ProvinceSelectLevel;
+                        selectedCounty = datalist.get(position);
+                        selectedID = database.getID(selectedProvince, selectedCity, selectedCounty);
+
+                        //参数重置
+                        {
+                            selectedProvince = null;
+                            selectedCity = null;
+                            selectedCounty = null;
                         }
-                        datalist.clear();
-                        datalist.addAll(data);
-                        datalist.notify();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                titleView.setText(selectCity);
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-                        CurrentLevel = SelectLevel;
-                        break;
-                    }
-                    case SelectLevel:
-                    {
-                        selectCounty = datalist.get(position);
-                        selectID = database.getID(selectProvince,selectCity,selectCounty);
-                        SharedPreferences.Editor editor = (SharedPreferences.Editor) GetContext.getContext().getSharedPreferences("selected",MODE_PRIVATE);
-                        editor.putString("city_selected_id",null);
+
+                        SharedPreferences.Editor editor = getSharedPreferences("selected",MODE_PRIVATE).edit();
+                        editor.putString("city_selected_id",selectedID);
                         editor.commit();
                         Intent intent = new Intent(Select_Activity.this,Weather_Activity.class);
                         startActivity(intent);
                         finish();
-                        CurrentLevel = ProvinceLevel;
-                        selectProvince = null;
-                        selectCity = null;
-                        selectCounty = null;
                         break;
                     }
                     default:

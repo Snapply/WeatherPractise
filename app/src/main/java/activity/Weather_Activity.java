@@ -28,20 +28,20 @@ import Tool.SaveParseHttpResponseListener;
  * Created by luweiling on 2016/9/30 0030.
  */
 public class Weather_Activity extends Activity {
-    private TextView city = (TextView) findViewById(R.id.city);
-    private TextView updateTime = (TextView) findViewById(R.id.updateTime);
-    private TextView weatherDesc = (TextView) findViewById(R.id.weatherDesc);
-    private TextView temp = (TextView) findViewById(R.id.temp);
-    private TextView feelTemp = (TextView) findViewById(R.id.feelTemp);
-    private TextView shidu = (TextView) findViewById(R.id.shidu);
-    private TextView presure = (TextView) findViewById(R.id.presure);
-    private TextView rainValue = (TextView) findViewById(R.id.rainValue);
-    private TextView windDirection = (TextView) findViewById(R.id.windDirection);
-    private TextView windDegree = (TextView) findViewById(R.id.windDegree);
-    private TextView windSpeed = (TextView) findViewById(R.id.windSpeed);
+    private TextView city;
+    private TextView updateTime;
+    private TextView weatherDesc;
+    private TextView temp;
+    private TextView feelTemp;
+    private TextView shidu;
+    private TextView presure;
+    private TextView rainValue;
+    private TextView windDirection;
+    private TextView windDegree;
+    private TextView windSpeed;
 
-    private Button fresh = (Button) findViewById(R.id.fresh);
-    private Button select = (Button) findViewById(R.id.select);
+    private Button fresh;
+    private Button select;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +49,43 @@ public class Weather_Activity extends Activity {
         LogUtil.d("Weather_Activity: 天气界面");
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.weatherpage_layout);
+        city = (TextView) findViewById(R.id.city);
+        updateTime = (TextView) findViewById(R.id.updateTime);
+        weatherDesc = (TextView) findViewById(R.id.weatherDesc);
+        temp = (TextView) findViewById(R.id.temp);
+        feelTemp = (TextView) findViewById(R.id.feelTemp);
+        shidu = (TextView) findViewById(R.id.shidu);
+        presure = (TextView) findViewById(R.id.presure);
+        rainValue = (TextView) findViewById(R.id.rainValue);
+        windDirection = (TextView) findViewById(R.id.windDirection);
+        windDegree = (TextView) findViewById(R.id.windDegree);
+        windSpeed = (TextView) findViewById(R.id.windSpeed);
+
+        fresh = (Button) findViewById(R.id.fresh);
+        select = (Button) findViewById(R.id.select);
+
         SharedPreferences sharedPreferences = getSharedPreferences("data",MODE_PRIVATE);
         if (sharedPreferences.getBoolean("city_selected",false)) {
-            this.setView();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setView();
+                }
+            });
+        } else {
+            fresh();
+            setView();
         }
-        fresh();
-        setView();
         fresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fresh();
-                setView();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setView();
+                    }
+                });
             }
         });
         select.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +93,7 @@ public class Weather_Activity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(Weather_Activity.this,Select_Activity.class);
                 startActivity(intent);
-                fresh();
+                finish();
             }
         });
     }
@@ -86,8 +112,9 @@ public class Weather_Activity extends Activity {
             }
 
             @Override
-            public void onErroe(Exception e) {
-                Toast.makeText(GetContext.getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+            public void onError(Exception e) {
+                LogUtil.d("Weather_Activity: 主界面错误-->" + e.toString());
+                e.printStackTrace();
             }
         });
     }
