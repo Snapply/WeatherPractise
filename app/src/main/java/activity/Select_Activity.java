@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Tool.GetContext;
+import Tool.LogUtil;
 import db.CityListDatabase;
 import model.City;
 import model.County;
@@ -30,44 +31,37 @@ import model.Province;
 public class Select_Activity extends Activity {
 
     private TextView titleView;
-
     private ListView listView;
-
     private ArrayAdapter<String> adapter;
-
     private ArrayList<String> datalist = new ArrayList<>();
 
     private static final int ProvinceLevel = 1;
-
     private static final int CityLevel = 2;
-
     private static final int CountyLevel = 3;
-
     private static final int SelectLevel = 4;
-
     public int CurrentLevel = ProvinceLevel;
 
     private CityListDatabase database;
 
     public String selectID;
-
     private String selectProvince;
-
     private String selectCity;
-
     private String selectCounty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences preferences = getSharedPreferences("data",MODE_PRIVATE);
+        LogUtil.d("Select_Activity: 界面选择");
         if (preferences != null) {
             if (preferences.getBoolean("city_selected",false)) {
+                LogUtil.d("Select_Activity：界面跳转");
                 Intent intent = new Intent(this,Weather_Activity.class);
                 startActivity(intent);
                 finish();
             }
         }
+        LogUtil.d("Select_Activity: 界面不跳转,继续执行");
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.selectcitylist_layout);
         titleView = (TextView) findViewById(R.id.title_view);
@@ -174,6 +168,7 @@ public class Select_Activity extends Activity {
     }
 
     private ArrayList<String> init() {
+        LogUtil.d("Select_Activity: datalist初始化，取数据库数据");
         ArrayList<String> result = new ArrayList<>();
         List<Province> list = database.LoadProvince();
         for (Province province : list) {

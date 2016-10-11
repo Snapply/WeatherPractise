@@ -36,6 +36,8 @@ import Tool.LogUtil;
  */
 public class CityDatabasesHelper extends SQLiteOpenHelper {
 
+    private Context context;
+
     private static final String CREATE_DATALIST = "create table citylist (" +
             "ID text primary key," +
             "name text," +
@@ -48,33 +50,42 @@ public class CityDatabasesHelper extends SQLiteOpenHelper {
 
     public CityDatabasesHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+        this.context = context;
     }
 
     private void insert(SQLiteDatabase db) {
+        LogUtil.d("DatabaseHelper: 装填城市数据");
         try {
-            XmlResourceParser xmlResourceParser = GetContext.getContext().getResources().getXml(R.xml.city);
+            XmlResourceParser xmlResourceParser = context.getResources().getXml(R.xml.city);
             int eventType = xmlResourceParser.getEventType();
-            StringBuilder id =null, name = null,county = null ,city = null , province = null;
-            while (eventType != XmlPullParser.END_DOCUMENT) {
+            String id =null, name = null,county = null ,city = null , province = null;
+            while (eventType != XmlResourceParser.END_DOCUMENT) {
+                LogUtil.d("DatabaseHelper: 解析文件");
                 String nodeName = xmlResourceParser.getName();
+                LogUtil.d("DatabaseHelper: nodeName = " + nodeName);
                 switch (eventType) {
-                    case XmlPullParser.START_TAG: {
+                    case XmlResourceParser.START_TAG: {
                         if ("td".equals(nodeName)) {
-                            if ((id.length() == 0) && (name.length() == 0) && (county.length() == 0) && (city.length() == 0) && (province.length() == 0)) {
-                                id.append(xmlResourceParser.nextText());
-                            } else if ((id.length() != 0) && (name.length() == 0) && (county.length() == 0) && (city.length() == 0) && (province.length() == 0)) {
-                                name.append(xmlResourceParser.nextText());
-                            } else if ((id.length() != 0) && (name.length() != 0) && (county.length() ==0) && (city.length() == 0) & (province.length() == 0)) {
-                                county.append(xmlResourceParser.nextText());
-                            } else if ((id.length() != 0) && (name.length() != 0) && (county.length() != 0) && (city.length() == 0) && (province.length() == 0)) {
-                                city.append(xmlResourceParser.nextText());
-                            } else if ((id.length() != 0) && (name.length() != 0) && (county.length() != 0) && (city.length() != 0) && (province.length() == 0)) {
-                                province.append(xmlResourceParser.nextText());
+                            if ((id == null) && (name == null) && (county == null) && (city == null) && (province == null)) {
+                                id = xmlResourceParser.nextText();
+                                LogUtil.d("DatabaseHelper: id = " + id);
+                            } else if ((id != null) && (name == null) && (county == null) && (city == null) && (province == null)) {
+                                name = xmlResourceParser.nextText();
+                                LogUtil.d("DatabaseHelper: name = " + name);
+                            } else if ((id != null) && (name != null) && (county == null) && (city == null) & (province == null)) {
+                                county = xmlResourceParser.nextText();
+                                LogUtil.d("DatabaseHelper: county = " + county);
+                            } else if ((id != null) && (name != null) && (county != null) && (city == null) && (province == null)) {
+                                city = xmlResourceParser.nextText();
+                                LogUtil.d("DatabaseHelper: city = " + city);
+                            } else if ((id != null) && (name != null) && (county != null) && (city != null) && (province == null)) {
+                                province = xmlResourceParser.nextText();
+                                LogUtil.d("DatabaseHelper: province = " + province);
                             }
                         }
                         break;
                     }
-                    case XmlPullParser.END_TAG: {
+                    case XmlResourceParser.END_TAG: {
                         if ("tr".equals(nodeName)) {
                             ContentValues values = new ContentValues();
                             values.put("id",id.toString());
@@ -83,18 +94,22 @@ public class CityDatabasesHelper extends SQLiteOpenHelper {
                             values.put("city",city.toString());
                             values.put("province",province.toString());
                             db.insert("citylist",null,values);
+                            LogUtil.d("DatabaseHelper: database commit");
                             values.clear();
+                            LogUtil.d("DatabaseHelper: value clear");
                         }
-                        id.setLength(0);
-                        name.setLength(0);
-                        county.setLength(0);
-                        city.setLength(0);
-                        province.setLength(0);
+                        id = null;
+                        name = null;
+                        county = null;
+                        city = null;
+                        province = null;
+                        LogUtil.d("DatabaseHelper: StringBuilder clear");
                         break;
                     }
                     default:
                         break;
                 }
+                eventType = xmlResourceParser.next();
             }
             /*
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

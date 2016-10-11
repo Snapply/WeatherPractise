@@ -20,6 +20,7 @@ import net.Util;
 import java.util.ArrayList;
 
 import Tool.GetContext;
+import Tool.LogUtil;
 import Tool.ParseHttpResponse;
 import Tool.SaveParseHttpResponseListener;
 
@@ -45,6 +46,7 @@ public class Weather_Activity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LogUtil.d("Weather_Activity: 天气界面");
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.weatherpage_layout);
         SharedPreferences sharedPreferences = getSharedPreferences("data",MODE_PRIVATE);
@@ -71,6 +73,7 @@ public class Weather_Activity extends Activity {
     }
 
     private void fresh() {
+        LogUtil.d("Weather_Activity: 天气数据刷新");
         SharedPreferences sharedPreferences = getSharedPreferences("selected",MODE_PRIVATE);
         String URL = "https://api.heweather.com/x3/weather?";
         String weatherID = "cityid=" + sharedPreferences.getString("city_selected_id",null);
@@ -90,6 +93,7 @@ public class Weather_Activity extends Activity {
     }
 
     private void setView() {
+        LogUtil.d("Weather_Activity: 界面刷新");
         SharedPreferences sharedPreferences = getSharedPreferences("data",MODE_PRIVATE);
         city.setText(sharedPreferences.getString("city",null));
         updateTime.setText(sharedPreferences.getString("updatetime",null));
