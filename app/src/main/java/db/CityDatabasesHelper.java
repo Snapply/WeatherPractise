@@ -88,11 +88,11 @@ public class CityDatabasesHelper extends SQLiteOpenHelper {
                     case XmlResourceParser.END_TAG: {
                         if ("tr".equals(nodeName)) {
                             ContentValues values = new ContentValues();
-                            values.put("id",id.toString());
-                            values.put("name",name.toString());
-                            values.put("county",county.toString());
-                            values.put("city",city.toString());
-                            values.put("province",province.toString());
+                            values.put("id",id);
+                            values.put("name",name);
+                            values.put("county",county);
+                            values.put("city",city);
+                            values.put("province",province);
                             db.insert("citylist",null,values);
                             LogUtil.d("DatabaseHelper: database commit");
                             values.clear();
@@ -103,7 +103,7 @@ public class CityDatabasesHelper extends SQLiteOpenHelper {
                         county = null;
                         city = null;
                         province = null;
-                        LogUtil.d("DatabaseHelper: StringBuilder clear");
+                        LogUtil.d("DatabaseHelper: String clear");
                         break;
                     }
                     default:
