@@ -55,75 +55,27 @@ public class ParseHttpResponse {
                 WeatherNow.add(nowObject.getString("tmp"));
                 WeatherNow.add(nowObject.getString("fl"));
                 WeatherNow.add(nowObject.getString("hum"));
-                //WeatherNow.add(nowObject.getString("pres"));
+                {
+                    if (nowObject.toString().contains("\"pres\"")) {
+                        WeatherNow.add(nowObject.getString("pres"));
+                    } else {
+                        WeatherNow.add("-");
+                    }
+                }
                 WeatherNow.add(nowObject.getString("pcpn"));
                 WeatherNow.add(nowObject.getJSONObject("wind").getString("dir"));
                 WeatherNow.add(nowObject.getJSONObject("wind").getString("sc"));
                 WeatherNow.add(nowObject.getJSONObject("wind").getString("spd"));
-                for (String temp : WeatherNow) {
-                    LogUtil.d("ParseHttpResponse: WeatherNow数据-->" + temp);
+
+                //遍历数据打印
+                {
+                    for (String temp : WeatherNow) {
+                        LogUtil.d("ParseHttpResponse: WeatherNow数据-->" + temp);
+                    }
                 }
                 listener.onWeatherComplete(WeatherNow);
             }
 
-            /*
-            for (int i=0;i < jsonArray.length();i++) {
-                switch (jsonArray.getString(i)) {
-                    case "basic" :
-                    {
-                        LogUtil.d("ParseHttpResponse: 解析Basic数据");
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String city = jsonObject.getString("city");
-                        String country = jsonObject.getString("cnty");
-                        String updatetime = jsonObject.getJSONObject("update").getString("loc");
-                        Basic.add(city);
-                        Basic.add(country);
-                        Basic.add(updatetime);
-                        break;
-                    }
-                    case "status" :
-                    {
-                        LogUtil.d("ParseHttpResponse: 解析status数据");
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String statusCode = jsonObject.getString("status");
-                        Status.add(statusCode);
-                        break;
-                    }
-                    case "now" :
-                    {
-                        LogUtil.d("ParseHttpResponse: 解析天气数据");
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String weatherDesc = jsonObject.getJSONObject("cond").getString("txt");
-                        String temp = jsonObject.getString("tmp");
-                        String feeltemp = jsonObject.getString("fl");
-                        String shidu = jsonObject.getString("hum");
-                        String presure = jsonObject.getString("pres");
-                        String rainValue = jsonObject.getString("pcpn");
-                        String windDirection = jsonObject.getJSONObject("wind").getString("dir");
-                        String windDegree = jsonObject.getJSONObject("wind").getString("sc");
-                        String windSpeed = jsonObject.getJSONObject("wind").getString("spd");
-                        WeatherNow.add(weatherDesc);
-                        WeatherNow.add(temp);
-                        WeatherNow.add(feeltemp);
-                        WeatherNow.add(shidu);
-                        WeatherNow.add(presure);
-                        WeatherNow.add(rainValue);
-                        WeatherNow.add(windDirection);
-                        WeatherNow.add(windDegree);
-                        WeatherNow.add(windSpeed);
-                        break;
-                    }
-                    default:
-                        break;
-                }
-            }
-            */
-            /*
-            LogUtil.d("ParseHttpResponse: 存储天气数据");
-            listener.onBasicComplete(Basic);
-            listener.onStatusComplete(Status);
-            listener.onWeatherComplete(WeatherNow);
-            */
         } catch (Exception e) {
             if (listener != null) {
                 listener.onError(e);

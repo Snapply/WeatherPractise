@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.luweiling.weatherpractise.R;
 
@@ -17,12 +15,8 @@ import net.CallBackListener;
 import net.HttpConnection;
 import net.Util;
 
-import java.util.ArrayList;
-
 import Tool.GetContext;
 import Tool.LogUtil;
-import Tool.ParseHttpResponse;
-import Tool.SaveParseHttpResponseListener;
 
 /**
  * Created by luweiling on 2016/9/30 0030.
@@ -34,7 +28,7 @@ public class Weather_Activity extends Activity {
     private TextView temp;
     private TextView feelTemp;
     private TextView shidu;
-    private TextView presure;
+    private TextView pressure;
     private TextView rainValue;
     private TextView windDirection;
     private TextView windDegree;
@@ -55,7 +49,7 @@ public class Weather_Activity extends Activity {
         temp = (TextView) findViewById(R.id.temp);
         feelTemp = (TextView) findViewById(R.id.feelTemp);
         shidu = (TextView) findViewById(R.id.shidu);
-        presure = (TextView) findViewById(R.id.presure);
+        pressure = (TextView) findViewById(R.id.presure);
         rainValue = (TextView) findViewById(R.id.rainValue);
         windDirection = (TextView) findViewById(R.id.windDirection);
         windDegree = (TextView) findViewById(R.id.windDegree);
@@ -121,15 +115,15 @@ public class Weather_Activity extends Activity {
         LogUtil.d("Weather_Activity: 界面刷新");
         SharedPreferences sharedPreferences = getSharedPreferences("data",MODE_PRIVATE);
         city.setText(sharedPreferences.getString("city",null));
-        updateTime.setText(sharedPreferences.getString("updatetime",null));
+        updateTime.setText(sharedPreferences.getString("updateTime",null));
         weatherDesc.setText(sharedPreferences.getString("weatherDesc",null));
-        temp.setText(sharedPreferences.getString("temp",null));
-        feelTemp.setText(sharedPreferences.getString("feeltemp",null));
-        shidu.setText(sharedPreferences.getString("shidu",null));
-        presure.setText(sharedPreferences.getString("presure",null));
-        rainValue.setText(sharedPreferences.getString("rainValue",null));
+        temp.setText(sharedPreferences.getString("temp",null) + "℃");
+        feelTemp.setText(sharedPreferences.getString("feelTemp",null) + "℃");
+        shidu.setText(sharedPreferences.getString("shidu",null) + "%");
+        pressure.setText(sharedPreferences.getString("pressure","-") + "MPa");
+        rainValue.setText(sharedPreferences.getString("rainValue",null) + "mm");
         windDirection.setText(sharedPreferences.getString("windDirection",null));
-        windDegree.setText(sharedPreferences.getString("windDegree",null));
-        windSpeed.setText(sharedPreferences.getString("windSpeed",null));
+        windDegree.setText(sharedPreferences.getString("windDegree",null) + "级");
+        windSpeed.setText(sharedPreferences.getString("windSpeed",null) + "m/s");
     }
 }
