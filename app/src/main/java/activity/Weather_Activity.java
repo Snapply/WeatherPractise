@@ -64,14 +64,9 @@ public class Weather_Activity extends Activity {
         fresh = (Button) findViewById(R.id.fresh);
         select = (Button) findViewById(R.id.select);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("data",MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getSharedPreferences("data",MODE_PRIVATE);
         if (sharedPreferences.getBoolean("city_selected",false)) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    setView();
-                }
-            });
+            setView();
         } else {
             fresh();
             setView();
@@ -91,6 +86,9 @@ public class Weather_Activity extends Activity {
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences.Editor editor = GetContext.getContext().getSharedPreferences("data",MODE_PRIVATE).edit();
+                editor.putBoolean("city_selected",false);
+                editor.commit();
                 Intent intent = new Intent(Weather_Activity.this,Select_Activity.class);
                 startActivity(intent);
                 finish();

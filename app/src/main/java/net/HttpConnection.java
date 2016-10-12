@@ -25,14 +25,33 @@ public class HttpConnection {
                     connection.setRequestMethod("GET");
                     connection.setConnectTimeout(8000);
                     connection.setReadTimeout(8000);
+                    connection.setDoInput(true);
+                    connection.connect();
                     InputStream inputStream = connection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                    //LogUtil.d("HttpConnection: InputStream--->" + inputStream.toString());
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"UTF-8"));
                     StringBuilder response = new StringBuilder();
-                    String line;
+                    String line = null;
+
                     while ((line = bufferedReader.readLine()) != null) {
+                        //LogUtil.d("HttpConnection: Line===>" + line);
                         response.append(line);
                     }
-                    listener.onComplete(response.toString());
+
+
+                    //验证JSON数据完整性
+                    String[] temp = response.toString().split(",");
+                    for (String str : temp) {
+                        LogUtil.d("截取json，循环打印---->" + str);
+                    }
+
+
+                    //LogUtil.d("HttpConnection: 返回JSON数据===>" + response.toString());
+                    if (listener != null) {
+                        listener.onComplete(response.toString());
+                    }
+                    bufferedReader.close();
+                    inputStream.close();
                 } catch (Exception e) {
                     listener.onError(e);
                 } finally {

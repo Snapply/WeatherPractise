@@ -94,6 +94,7 @@ public class Select_Activity extends Activity {
                         datalist.clear();
                         datalist.addAll(list);
                         adapter.notifyDataSetChanged();
+                        listView.setSelection(0);
                         titleView.setText(selectedProvince);
                         break;
                     }
@@ -119,6 +120,7 @@ public class Select_Activity extends Activity {
                         datalist.clear();
                         datalist.addAll(list);
                         adapter.notifyDataSetChanged();
+                        listView.setSelection(0);
                         titleView.setText(selectedCity);
                         break;
                     }

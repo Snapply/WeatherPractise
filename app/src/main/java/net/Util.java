@@ -21,7 +21,7 @@ public class Util {
         ParseHttpResponse.parseResponse(weatherResponss, new SaveParseHttpResponseListener() {
             @Override
             public void onBasicComplete(ArrayList<String> list) {
-                if (list.get(0) != null) {
+                if (!list.isEmpty()) {
                     editor.putBoolean("city_selected",true);
                     editor.putString("city",list.get(0));
                     editor.putString("country",list.get(1));
@@ -44,11 +44,11 @@ public class Util {
                 editor.putString("temp",list.get(1));
                 editor.putString("feelTemp",list.get(2));
                 editor.putString("shidu",list.get(3));
-                editor.putString("pressure",list.get(4));
-                editor.putString("rainValue",list.get(5));
-                editor.putString("windDirection",list.get(6));
-                editor.putString("windDegree",list.get(7));
-                editor.putString("windSpeed",list.get(8));
+                //editor.putString("pressure",list.get(4));
+                editor.putString("rainValue",list.get(4));
+                editor.putString("windDirection",list.get(5));
+                editor.putString("windDegree",list.get(6));
+                editor.putString("windSpeed",list.get(7));
                 editor.commit();
             }
 
