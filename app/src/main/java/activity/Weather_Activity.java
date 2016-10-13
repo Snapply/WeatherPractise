@@ -38,6 +38,18 @@ public class Weather_Activity extends Activity {
     private Button select;
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 100:
+                fresh();
+                setView();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LogUtil.d("Weather_Activity: 天气界面");
@@ -58,13 +70,12 @@ public class Weather_Activity extends Activity {
         fresh = (Button) findViewById(R.id.fresh);
         select = (Button) findViewById(R.id.select);
 
-        final SharedPreferences sharedPreferences = getSharedPreferences("data",MODE_PRIVATE);
-        if (sharedPreferences.getBoolean("city_selected",false)) {
-            setView();
-        } else {
+        //刷新天气界面
+        {
             fresh();
             setView();
         }
+
         fresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +96,7 @@ public class Weather_Activity extends Activity {
                 editor.commit();
                 Intent intent = new Intent(Weather_Activity.this,Select_Activity.class);
                 startActivity(intent);
-                finish();
+                Weather_Activity.this.finish();
             }
         });
     }
@@ -120,7 +131,7 @@ public class Weather_Activity extends Activity {
         temp.setText(sharedPreferences.getString("temp",null) + "℃");
         feelTemp.setText(sharedPreferences.getString("feelTemp",null) + "℃");
         shidu.setText(sharedPreferences.getString("shidu",null) + "%");
-        pressure.setText(sharedPreferences.getString("pressure","-") + "MPa");
+        pressure.setText(sharedPreferences.getString("pressure","*") + "MPa");
         rainValue.setText(sharedPreferences.getString("rainValue",null) + "mm");
         windDirection.setText(sharedPreferences.getString("windDirection",null));
         windDegree.setText(sharedPreferences.getString("windDegree",null) + "级");

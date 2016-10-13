@@ -141,7 +141,7 @@ public class Select_Activity extends Activity {
                         editor.putString("city_selected_id",selectedID);
                         editor.commit();
                         Intent intent = new Intent(Select_Activity.this,Weather_Activity.class);
-                        startActivity(intent);
+                        startActivityForResult(intent,100);
                         finish();
                         break;
                     }

@@ -55,17 +55,18 @@ public class ParseHttpResponse {
                 WeatherNow.add(nowObject.getString("tmp"));
                 WeatherNow.add(nowObject.getString("fl"));
                 WeatherNow.add(nowObject.getString("hum"));
+                WeatherNow.add(nowObject.getString("pcpn"));
+                WeatherNow.add(nowObject.getJSONObject("wind").getString("dir"));
+                WeatherNow.add(nowObject.getJSONObject("wind").getString("sc"));
+                WeatherNow.add(nowObject.getJSONObject("wind").getString("spd"));
+
                 {
-                    if (nowObject.toString().contains("\"pres\"")) {
+                    if (nowObject.has("pres")) {
                         WeatherNow.add(nowObject.getString("pres"));
                     } else {
                         WeatherNow.add("-");
                     }
                 }
-                WeatherNow.add(nowObject.getString("pcpn"));
-                WeatherNow.add(nowObject.getJSONObject("wind").getString("dir"));
-                WeatherNow.add(nowObject.getJSONObject("wind").getString("sc"));
-                WeatherNow.add(nowObject.getJSONObject("wind").getString("spd"));
 
                 //遍历数据打印
                 {

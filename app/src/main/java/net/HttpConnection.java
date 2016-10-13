@@ -39,11 +39,13 @@ public class HttpConnection {
                     }
 
 
+                    /*
                     //验证JSON数据完整性
                     String[] temp = response.toString().split(",");
                     for (String str : temp) {
                         LogUtil.d("截取json，循环打印---->" + str);
                     }
+                    */
 
 
                     //LogUtil.d("HttpConnection: 返回JSON数据===>" + response.toString());

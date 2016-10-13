@@ -44,11 +44,13 @@ public class Util {
                 editor.putString("temp",list.get(1));
                 editor.putString("feelTemp",list.get(2));
                 editor.putString("shidu",list.get(3));
-                editor.putString("pressure",list.get(4));
-                editor.putString("rainValue",list.get(5));
-                editor.putString("windDirection",list.get(6));
-                editor.putString("windDegree",list.get(7));
-                editor.putString("windSpeed",list.get(8));
+                editor.putString("rainValue",list.get(4));
+                editor.putString("windDirection",list.get(5));
+                editor.putString("windDegree",list.get(6));
+                editor.putString("windSpeed",list.get(7));
+
+                editor.putString("pressure",list.get(8));
+
                 editor.commit();
             }
 
