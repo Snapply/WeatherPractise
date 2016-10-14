@@ -37,7 +37,6 @@ public class Select_Activity extends Activity {
     private static final int ProvinceSelectLevel = 1;
     private static final int CitySelectLevel = 2;
     private static final int CountySelectLevel = 3;
-    private static final int IDSelectLevel = 4;
     public int CurrentLevel = ProvinceSelectLevel;
 
     private CityListDatabase database;
@@ -141,7 +140,7 @@ public class Select_Activity extends Activity {
                         editor.putString("city_selected_id",selectedID);
                         editor.commit();
                         Intent intent = new Intent(Select_Activity.this,Weather_Activity.class);
-                        startActivityForResult(intent,100);
+                        startActivity(intent);
                         finish();
                         break;
                     }
@@ -167,5 +166,29 @@ public class Select_Activity extends Activity {
             }
         }
         return result;
+    }
+
+    private void LoadProvinceList() {
+        if (CurrentLevel == ProvinceSelectLevel) {
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        switch (CurrentLevel) {
+            case CountySelectLevel:
+                CurrentLevel = CitySelectLevel;
+                adapter.notifyDataSetChanged();
+                break;
+            case CitySelectLevel:
+                CurrentLevel = ProvinceSelectLevel;
+                adapter.notifyDataSetChanged();
+                break;
+            case ProvinceSelectLevel:
+                finish();
+                break;
+            default:
+                break;
+        }
     }
 }
