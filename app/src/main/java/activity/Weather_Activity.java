@@ -96,7 +96,7 @@ public class Weather_Activity extends Activity {
                 editor.commit();
                 Intent intent = new Intent(Weather_Activity.this,Select_Activity.class);
                 startActivity(intent);
-                Weather_Activity.this.finish();
+                finish();
             }
         });
     }

@@ -56,6 +56,10 @@ public class Select_Activity extends Activity {
                 Intent intent = new Intent(this,Weather_Activity.class);
                 startActivity(intent);
                 finish();
+
+                //终结本程序
+                return;
+
             }
         }
         LogUtil.d("Select_Activity: 界面不跳转,继续执行");
