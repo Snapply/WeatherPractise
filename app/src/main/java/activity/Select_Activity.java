@@ -16,7 +16,6 @@ import com.example.luweiling.weatherpractise.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import Tool.GetContext;
 import Tool.LogUtil;
 import db.CityListDatabase;
 import model.City;
@@ -37,15 +36,14 @@ public class Select_Activity extends Activity {
     private static final int ProvinceSelectLevel = 1;
     private static final int CitySelectLevel = 2;
     private static final int CountySelectLevel = 3;
-    private static final int IDSelectLevel = 4;
     public int CurrentLevel = ProvinceSelectLevel;
 
     private CityListDatabase database;
 
     public String selectedID;
-    private String selectedProvince;
-    private String selectedCity;
-    private String selectedCounty;
+    private String selectedProvinceName;
+    private String selectedCityName;
+    private String selectedCountyName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +56,10 @@ public class Select_Activity extends Activity {
                 Intent intent = new Intent(this,Weather_Activity.class);
                 startActivity(intent);
                 finish();
+
+                //终结本程序
+                return;
+
             }
         }
         LogUtil.d("Select_Activity: 界面不跳转,继续执行");
@@ -77,71 +79,49 @@ public class Select_Activity extends Activity {
                     case ProvinceSelectLevel:
                     {
                         CurrentLevel = CitySelectLevel;
+                        selectedProvinceName = datalist.get(position);
                         Province selectProvince = new Province();
-                        selectProvince.setName(datalist.get(position));
-                        selectedProvince = datalist.get(position);
-                        ArrayList<City> cityArrayList = database.LoadCity(selectProvince);
-                        ArrayList<String> temp = new ArrayList<String>();
-                        ArrayList<String> list = new ArrayList<String>();
-                        for (City city : cityArrayList) {
-                            temp.add(city.getName());
-                        }
-                        for (String cityName : temp) {
-                            if (!list.contains(cityName)) {
-                                list.add(cityName);
-                            }
-                        }
-                        datalist.clear();
-                        datalist.addAll(list);
-                        adapter.notifyDataSetChanged();
-                        listView.setSelection(0);
-                        titleView.setText(selectedProvince);
+                        selectProvince.setName(selectedProvinceName);
+                        LoadCityList(selectProvince);
                         break;
                     }
                     case CitySelectLevel:
                     {
                         CurrentLevel = CountySelectLevel;
+                        selectedCityName = datalist.get(position);
                         Province selectProvince = new Province();
-                        selectProvince.setName(selectedProvince);
                         City selectCity = new City();
-                        selectedCity = datalist.get(position);
-                        selectCity.setName(selectedCity);
-                        ArrayList<County> countyArrayList = database.LoadCounty(selectProvince,selectCity);
-                        ArrayList<String> temp = new ArrayList<String>();
-                        ArrayList<String> list = new ArrayList<String>();
-                        for (County county : countyArrayList) {
-                            temp.add(county.getCountyName());
-                        }
-                        for (String countyName : temp) {
-                            if (!list.contains(countyName)) {
-                                list.add(countyName);
-                            }
-                        }
-                        datalist.clear();
-                        datalist.addAll(list);
-                        adapter.notifyDataSetChanged();
-                        listView.setSelection(0);
-                        titleView.setText(selectedCity);
+                        selectProvince.setName(selectedProvinceName);
+                        selectCity.setName(selectedCityName);
+                        LoadCountyList(selectProvince,selectCity);
                         break;
                     }
                     case CountySelectLevel:
                     {
                         CurrentLevel = ProvinceSelectLevel;
-                        selectedCounty = datalist.get(position);
-                        selectedID = database.getID(selectedProvince, selectedCity, selectedCounty);
+                        selectedCountyName = datalist.get(position);
+                        selectedID = database.getID(selectedProvinceName, selectedCityName, selectedCountyName);
+
+                        //存储选择数据
+                        {
+                            SharedPreferences.Editor editor = getSharedPreferences("select",MODE_PRIVATE).edit();
+                            editor.putString("selectProvinceName",selectedProvinceName);
+                            editor.putString("selectCityName",selectedCityName);
+                            editor.putString("selectCountyName",selectedCountyName);
+                            editor.putString("selectID",selectedID);
+                            editor.commit();
+                        }
 
                         //参数重置
                         {
-                            selectedProvince = null;
-                            selectedCity = null;
-                            selectedCounty = null;
+                            selectedProvinceName = null;
+                            selectedCityName = null;
+                            selectedCountyName = null;
+                            selectedID = null;
                         }
 
-                        SharedPreferences.Editor editor = getSharedPreferences("selected",MODE_PRIVATE).edit();
-                        editor.putString("city_selected_id",selectedID);
-                        editor.commit();
                         Intent intent = new Intent(Select_Activity.this,Weather_Activity.class);
-                        startActivityForResult(intent,100);
+                        startActivity(intent);
                         finish();
                         break;
                     }
@@ -154,18 +134,82 @@ public class Select_Activity extends Activity {
 
     private ArrayList<String> init() {
         LogUtil.d("Select_Activity: datalist初始化，取数据库数据");
-        ArrayList<String> result = new ArrayList<>();
-        ArrayList<String> temp = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<String>();
         List<Province> list = database.LoadProvince();
         for (Province province : list) {
             //LogUtil.d("Select_Activity: init datalist provinceName = " + province.getName());
-            temp.add(province.getName());
-        }
-        for (String provinceName : temp) {
-            if (!result.contains(provinceName)) {
-                result.add(provinceName);
+            //result.add(province.getName());
+            if (!result.contains(province.getName())) {
+                result.add(province.getName());
             }
         }
         return result;
+    }
+
+    private void LoadProvinceList() {
+        List<Province> provinceList = new ArrayList<Province>();
+        provinceList = database.LoadProvince();
+        List<String> provinceNameList = new ArrayList<String>();
+        for(Province province : provinceList) {
+            if (!provinceNameList.contains(province.getName())) {
+                provinceNameList.add(province.getName());
+            }
+        }
+        datalist.clear();
+        datalist.addAll(provinceNameList);
+        adapter.notifyDataSetChanged();
+        listView.setSelection(0);
+        titleView.setText("中国");
+    }
+
+    private void LoadCityList(Province province) {
+        List<City> cityList = new ArrayList<City>();
+        cityList = database.LoadCity(province);
+        List<String> cityNameList = new ArrayList<String>();
+        for (City city : cityList) {
+            if ( !(cityNameList.contains(city.getName()))) {
+                cityNameList.add(city.getName());
+            }
+        }
+        datalist.clear();
+        datalist.addAll(cityNameList);
+        adapter.notifyDataSetChanged();
+        listView.setSelection(0);
+        titleView.setText(province.getName());
+    }
+
+    private void LoadCountyList(Province province,City city) {
+        List<County> countyList = new ArrayList<>();
+        countyList = database.LoadCounty(province,city);
+        List<String> countyNameList = new ArrayList<>();
+        for (County county : countyList) {
+            countyNameList.add(county.getCountyName());
+        }
+        datalist.clear();
+        datalist.addAll(countyNameList);
+        adapter.notifyDataSetChanged();
+        listView.setSelection(0);
+        titleView.setText(city.getName());
+    }
+
+    @Override
+    public void onBackPressed() {
+        switch (CurrentLevel) {
+            case CountySelectLevel:
+                CurrentLevel = CitySelectLevel;
+                Province province = new Province();
+                province.setName(selectedProvinceName);
+                LoadCityList(province);
+                break;
+            case CitySelectLevel:
+                CurrentLevel = ProvinceSelectLevel;
+                LoadProvinceList();
+                break;
+            case ProvinceSelectLevel:
+                finish();
+                break;
+            default:
+                break;
+        }
     }
 }

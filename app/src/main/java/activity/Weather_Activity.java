@@ -96,16 +96,16 @@ public class Weather_Activity extends Activity {
                 editor.commit();
                 Intent intent = new Intent(Weather_Activity.this,Select_Activity.class);
                 startActivity(intent);
-                Weather_Activity.this.finish();
+                finish();
             }
         });
     }
 
     private void fresh() {
         LogUtil.d("Weather_Activity: 天气数据刷新");
-        SharedPreferences sharedPreferences = getSharedPreferences("selected",MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("select",MODE_PRIVATE);
         String URL = "https://api.heweather.com/x3/weather?";
-        String weatherID = "cityid=" + sharedPreferences.getString("city_selected_id",null);
+        String weatherID = "cityid=" + sharedPreferences.getString("selectID",null);
         String key = "&key=4da31d32471e493fb672119675da8b92";
         String address = URL + weatherID + key;
         HttpConnection.sendRequest(address, new CallBackListener() {

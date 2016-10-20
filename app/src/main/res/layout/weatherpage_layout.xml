@@ -129,13 +129,14 @@
     <TableRow>
         <Button
             android:layout_height="wrap_content"
-            android:id="@+id/fresh"
-            android:text="@string/freshButton"/>
+            android:id="@+id/select"
+            android:text="@string/selectButton"/>
 
         <Button
             android:layout_height="wrap_content"
-            android:id="@+id/select"
-            android:text="@string/selectButton"/>
+            android:id="@+id/fresh"
+            android:text="@string/freshButton"/>
+
     </TableRow>
 
 </TableLayout>
