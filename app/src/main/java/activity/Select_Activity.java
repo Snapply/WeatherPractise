@@ -186,10 +186,14 @@ public class Select_Activity extends Activity {
     private void LoadProvinceList() {
         List<Province> provinceList = new ArrayList<>();
         provinceList = database.LoadProvince();
+        List<String> tempList = new ArrayList<>();
         List<String> provinceNameList = new ArrayList<>();
         for(Province province : provinceList) {
-            if ( !(provinceNameList.contains(new String(province.getName())))) {
-                provinceNameList.add(province.getName());
+            tempList.add(province.getName());
+        }
+        for (String name : tempList) {
+            if (!provinceNameList.contains(name)) {
+                provinceNameList.add(name);
             }
         }
         datalist.clear();
