@@ -174,26 +174,25 @@ public class Select_Activity extends Activity {
 
     private ArrayList<String> init() {
         LogUtil.d("Select_Activity: datalist初始化，取数据库数据");
-        ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<String>();
         List<Province> list = database.LoadProvince();
         for (Province province : list) {
             //LogUtil.d("Select_Activity: init datalist provinceName = " + province.getName());
-            result.add(province.getName());
+            //result.add(province.getName());
+            if (!result.contains(province.getName())) {
+                result.add(province.getName());
+            }
         }
         return result;
     }
 
     private void LoadProvinceList() {
-        List<Province> provinceList = new ArrayList<>();
+        List<Province> provinceList = new ArrayList<Province>();
         provinceList = database.LoadProvince();
-        List<String> tempList = new ArrayList<>();
-        List<String> provinceNameList = new ArrayList<>();
+        List<String> provinceNameList = new ArrayList<String>();
         for(Province province : provinceList) {
-            tempList.add(province.getName());
-        }
-        for (String name : tempList) {
-            if (!provinceNameList.contains(name)) {
-                provinceNameList.add(name);
+            if (!provinceNameList.contains(province.getName())) {
+                provinceNameList.add(province.getName());
             }
         }
         datalist.clear();
@@ -204,9 +203,9 @@ public class Select_Activity extends Activity {
     }
 
     private void LoadCityList(Province province) {
-        List<City> cityList = new ArrayList<>();
+        List<City> cityList = new ArrayList<City>();
         cityList = database.LoadCity(province);
-        List<String> cityNameList = new ArrayList<>();
+        List<String> cityNameList = new ArrayList<String>();
         for (City city : cityList) {
             if ( !(cityNameList.contains(city.getName()))) {
                 cityNameList.add(city.getName());
