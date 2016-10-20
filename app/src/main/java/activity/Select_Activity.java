@@ -75,27 +75,6 @@ public class Select_Activity extends Activity {
                     case ProvinceSelectLevel:
                     {
                         CurrentLevel = CitySelectLevel;
-                        /*
-                        Province selectProvince = new Province();
-                        selectProvince.setName(datalist.get(position));
-                        selectedProvinceName = datalist.get(position);
-                        ArrayList<City> cityArrayList = database.LoadCity(selectProvince);
-                        ArrayList<String> temp = new ArrayList<String>();
-                        ArrayList<String> list = new ArrayList<String>();
-                        for (City city : cityArrayList) {
-                            temp.add(city.getName());
-                        }
-                        for (String cityName : temp) {
-                            if (!list.contains(cityName)) {
-                                list.add(cityName);
-                            }
-                        }
-                        datalist.clear();
-                        datalist.addAll(list);
-                        adapter.notifyDataSetChanged();
-                        listView.setSelection(0);
-                        titleView.setText(selectedProvinceName);
-                        */
                         selectedProvinceName = datalist.get(position);
                         Province selectProvince = new Province();
                         selectProvince.setName(selectedProvinceName);
@@ -105,29 +84,6 @@ public class Select_Activity extends Activity {
                     case CitySelectLevel:
                     {
                         CurrentLevel = CountySelectLevel;
-                        /*
-                        Province selectProvince = new Province();
-                        selectProvince.setName(selectedProvinceName);
-                        City selectCity = new City();
-                        selectedCityName = datalist.get(position);
-                        selectCity.setName(selectedCityName);
-                        ArrayList<County> countyArrayList = database.LoadCounty(selectProvince,selectCity);
-                        ArrayList<String> temp = new ArrayList<String>();
-                        ArrayList<String> list = new ArrayList<String>();
-                        for (County county : countyArrayList) {
-                            temp.add(county.getCountyName());
-                        }
-                        for (String countyName : temp) {
-                            if (!list.contains(countyName)) {
-                                list.add(countyName);
-                            }
-                        }
-                        datalist.clear();
-                        datalist.addAll(list);
-                        adapter.notifyDataSetChanged();
-                        listView.setSelection(0);
-                        titleView.setText(selectedCityName);
-                        */
                         selectedCityName = datalist.get(position);
                         Province selectProvince = new Province();
                         City selectCity = new City();
