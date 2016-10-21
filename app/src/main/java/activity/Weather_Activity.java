@@ -38,18 +38,6 @@ public class Weather_Activity extends Activity {
     private Button select;
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case 100:
-                fresh();
-                setView();
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LogUtil.d("Weather_Activity: 天气界面");
@@ -72,18 +60,18 @@ public class Weather_Activity extends Activity {
 
         //刷新天气界面
         {
-            fresh();
-            setView();
+            saveData();
+            freshView();
         }
 
         fresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fresh();
+                saveData();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        setView();
+                        freshView();
                     }
                 });
             }
@@ -101,7 +89,7 @@ public class Weather_Activity extends Activity {
         });
     }
 
-    private void fresh() {
+    private void saveData() {
         LogUtil.d("Weather_Activity: 天气数据刷新");
         SharedPreferences sharedPreferences = getSharedPreferences("select",MODE_PRIVATE);
         String URL = "https://api.heweather.com/x3/weather?";
@@ -122,7 +110,7 @@ public class Weather_Activity extends Activity {
         });
     }
 
-    private void setView() {
+    private void freshView() {
         LogUtil.d("Weather_Activity: 界面刷新");
         SharedPreferences sharedPreferences = getSharedPreferences("data",MODE_PRIVATE);
         city.setText(sharedPreferences.getString("city",null));
@@ -131,7 +119,7 @@ public class Weather_Activity extends Activity {
         temp.setText(sharedPreferences.getString("temp",null) + "℃");
         feelTemp.setText(sharedPreferences.getString("feelTemp",null) + "℃");
         shidu.setText(sharedPreferences.getString("shidu",null) + "%");
-        pressure.setText(sharedPreferences.getString("pressure","*") + "MPa");
+        pressure.setText(sharedPreferences.getString("pressure","*") + "hPa");
         rainValue.setText(sharedPreferences.getString("rainValue",null) + "mm");
         windDirection.setText(sharedPreferences.getString("windDirection",null));
         windDegree.setText(sharedPreferences.getString("windDegree",null) + "级");
