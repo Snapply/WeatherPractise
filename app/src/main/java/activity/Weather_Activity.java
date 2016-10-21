@@ -49,7 +49,6 @@ public class Weather_Activity extends Activity {
                 }
             }
         }).start();
-        freshView();
     }
 
     @Override
@@ -83,12 +82,6 @@ public class Weather_Activity extends Activity {
                         saveData();
                     }
                 }).start();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        freshView();
-                    }
-                });
             }
         });
 
@@ -122,6 +115,12 @@ public class Weather_Activity extends Activity {
             public void onError(Exception e) {
                 LogUtil.d("Weather_Activity: 主界面错误-->" + e.toString());
                 e.printStackTrace();
+            }
+        });
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                freshView();
             }
         });
     }
