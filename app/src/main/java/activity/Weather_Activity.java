@@ -38,9 +38,24 @@ public class Weather_Activity extends Activity {
     private Button select;
 
     @Override
+    protected void onResume() {
+        LogUtil.d("Weather_Activity: onResume");
+        super.onResume();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                {
+                    saveData();
+                }
+            }
+        }).start();
+        freshView();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogUtil.d("Weather_Activity: 天气界面");
+        LogUtil.d("Weather_Activity: 天气界面 onCreate");
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.weatherpage_layout);
         city = (TextView) findViewById(R.id.city);
@@ -58,16 +73,16 @@ public class Weather_Activity extends Activity {
         fresh = (Button) findViewById(R.id.fresh);
         select = (Button) findViewById(R.id.select);
 
-        //刷新天气界面
-        {
-            saveData();
-            freshView();
-        }
 
         fresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveData();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        saveData();
+                    }
+                }).start();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -76,6 +91,7 @@ public class Weather_Activity extends Activity {
                 });
             }
         });
+
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

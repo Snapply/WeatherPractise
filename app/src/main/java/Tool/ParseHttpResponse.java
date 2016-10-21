@@ -32,9 +32,11 @@ public class ParseHttpResponse {
                 Basic.add(basicObject.getString("city"));
                 Basic.add(basicObject.getString("cnty"));
                 Basic.add(basicObject.getJSONObject("update").getString("loc"));
+                /*
                 for (String temp : Basic) {
                     LogUtil.d("ParseHttpResponse: Basic数据-->" + temp);
                 }
+                */
                 listener.onBasicComplete(Basic);
             }
 
@@ -42,9 +44,11 @@ public class ParseHttpResponse {
             {
                 LogUtil.d("ParseHttpResponse: 解析status数据");
                 Status.add(jsonObject.getString("status"));
+                /*
                 for (String temp : Status) {
                     LogUtil.d("ParseHttpResponse: Status数据-->" + temp);
                 }
+                */
                 listener.onStatusComplete(Status);
             }
 
@@ -69,11 +73,13 @@ public class ParseHttpResponse {
                 }
 
                 //遍历数据打印
+                /*
                 {
                     for (String temp : WeatherNow) {
                         LogUtil.d("ParseHttpResponse: WeatherNow数据-->" + temp);
                     }
                 }
+                */
                 listener.onWeatherComplete(WeatherNow);
             }
 
