@@ -41,6 +41,7 @@ public class Weather_Activity extends Activity {
     protected void onResume() {
         LogUtil.d("Weather_Activity: onResume");
         super.onResume();
+        freshView();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -134,7 +135,14 @@ public class Weather_Activity extends Activity {
         temp.setText(sharedPreferences.getString("temp",null) + "℃");
         feelTemp.setText(sharedPreferences.getString("feelTemp",null) + "℃");
         shidu.setText(sharedPreferences.getString("shidu",null) + "%");
-        pressure.setText(sharedPreferences.getString("pressure","*") + "hPa");
+        {
+            String pres = sharedPreferences.getString("pressure","0");
+            if (Integer.parseInt(pres) == 0) {
+                pressure.setText("无数据");
+            } else {
+                pressure.setText(Float.parseFloat(pres)/1000 + "标准大气压");
+            }
+        }
         rainValue.setText(sharedPreferences.getString("rainValue",null) + "mm");
         windDirection.setText(sharedPreferences.getString("windDirection",null));
         windDegree.setText(sharedPreferences.getString("windDegree",null) + "级");
