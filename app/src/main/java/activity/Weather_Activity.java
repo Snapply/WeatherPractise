@@ -131,7 +131,7 @@ public class Weather_Activity extends Activity {
         temp.setText(sharedPreferences.getString("temp",null) + "℃");
         feelTemp.setText(sharedPreferences.getString("feelTemp",null) + "℃");
         shidu.setText(sharedPreferences.getString("shidu",null) + "%");
-        pressure.setText(sharedPreferences.getString("pressure","*") + "MPa");
+        pressure.setText(sharedPreferences.getString("pressure","*") + "hPa");
         rainValue.setText(sharedPreferences.getString("rainValue",null) + "mm");
         windDirection.setText(sharedPreferences.getString("windDirection",null));
         windDegree.setText(sharedPreferences.getString("windDegree",null) + "级");
