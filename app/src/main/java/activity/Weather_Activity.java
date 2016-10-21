@@ -140,7 +140,7 @@ public class Weather_Activity extends Activity {
             if (Integer.parseInt(pres) == 0) {
                 pressure.setText("无数据");
             } else {
-                pressure.setText(Float.parseFloat(pres)/1000 + "标准大气压");
+                pressure.setText(Float.parseFloat(pres)*0.0009869 + "标准大气压");
             }
         }
         rainValue.setText(sharedPreferences.getString("rainValue",null) + "mm");
